@@ -80,6 +80,9 @@ export const api_createCategory = (sid: number, d: { original_name: string; desc
 export const api_deleteCategory = (cid: number) =>
   api.delete(`/categories/${cid}`).then(() => {});
 
+export const api_updateCategory = (cid: number, d: { original_name?: string; description?: string }) =>
+  api.put<Category>(`/categories/${cid}`, d).then(r => r.data);
+
 // Mappings
 export const api_getMapping = (cid: number): Promise<Mapping | null> =>
   api.get<Mapping>(`/categories/${cid}/mapping`)

@@ -12,6 +12,7 @@ import {
   api_updateMapping,
   api_getDimValues,
   api_deleteCategory,
+  api_updateCategory,
 
 } from '../api';
 
@@ -107,9 +108,20 @@ export default function CategoriesPage() {
     load();
   };
 
+  const updateName = async (catId: number, value: string) => {
+    await api_updateCategory(catId, { original_name: value });
+    setCats(prev => prev.map(c => c.id === catId ? { ...c, original_name: value } : c));
+  };
+
   const columns = [
     { title: 'ID', dataIndex: 'id', width: 60 },
-    { title: 'Category Name', dataIndex: 'original_name', ellipsis: true },
+    { title: 'Category Name', dataIndex: 'original_name', ellipsis: true,
+      render: (name: string, r: Category) => (
+        <Input size="small" defaultValue={name} style={{ border: 'none', background: 'transparent' }}
+          onBlur={(e) => { if (e.target.value !== name) updateName(r.id, e.target.value); }}
+          onPressEnter={(e: any) => { (e.target as HTMLInputElement).blur(); }} />
+      ),
+    },
     {
       title: 'Threat',
       dataIndex: 'is_threat',
