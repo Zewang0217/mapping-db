@@ -25,7 +25,7 @@ services:
     environment:
       DATABASE_URL: postgresql://mapper:${DB_PASSWORD:-devpassword}@db:5432/mapping
     ports:
-      - "8000:8000"
+      - "8001:8000"
     volumes:
       - ./backend/app:/app/app
       - ./backend/scripts:/app/scripts
