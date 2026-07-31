@@ -9,6 +9,7 @@ export default function Layout() {
   const menuData = [
     { path: '/', name: 'Dashboard', icon: <BarChartOutlined /> },
     { path: '/sources', name: 'Sources', icon: <DatabaseOutlined /> },
+    { path: '/dim-values', name: 'Dimension Values', icon: <TagOutlined /> },
   ];
 
   return (
