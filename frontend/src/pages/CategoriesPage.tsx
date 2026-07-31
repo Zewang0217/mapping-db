@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Table, Button, Modal, Form, Input, Select, Tag, message, Space, Breadcrumb } from 'antd';
-import { PlusOutlined, ArrowLeftOutlined } from '@ant-design/icons';
+import { PlusOutlined, ArrowLeftOutlined, DeleteOutlined } from '@ant-design/icons';
 import {
   Category,
   Mapping,
@@ -11,6 +11,8 @@ import {
   api_getMapping,
   api_updateMapping,
   api_getDimValues,
+  api_deleteCategory,
+
 } from '../api';
 
 export default function CategoriesPage() {
@@ -97,6 +99,12 @@ export default function CategoriesPage() {
     } catch {
       // form validation or API error
     }
+  };
+
+  const handleDelete = async (catId: number) => {
+    await api_deleteCategory(catId);
+    message.success('Deleted');
+    load();
   };
 
   const columns = [
@@ -195,6 +203,14 @@ export default function CategoriesPage() {
         const color = s === 'mapped' ? 'green' : s === 'needs_discussion' ? 'orange' : 'default';
         return <Tag color={color}>{s}</Tag>;
       },
+    },
+    {
+      title: '',
+      width: 50,
+      render: (_: unknown, r: Category) => (
+        <Button type="text" danger size="small" icon={<DeleteOutlined />}
+          onClick={() => handleDelete(r.id)} />
+      ),
     },
   ];
 

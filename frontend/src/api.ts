@@ -77,6 +77,9 @@ export const api_getCategories = (sid: number) =>
 export const api_createCategory = (sid: number, d: { original_name: string; description?: string; is_threat?: boolean }) =>
   api.post<Category>(`/sources/${sid}/categories`, d).then(r => r.data);
 
+export const api_deleteCategory = (cid: number) =>
+  api.delete(`/categories/${cid}`).then(() => {});
+
 // Mappings
 export const api_getMapping = (cid: number): Promise<Mapping | null> =>
   api.get<Mapping>(`/categories/${cid}/mapping`)
