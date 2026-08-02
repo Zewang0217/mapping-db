@@ -131,45 +131,48 @@ export default function CategoriesPage() {
     },
     {
       title: 'Source Dim',
-      width: 150,
+      width: 200,
       render: (_: unknown, r: Category) => (
         <Select
+          mode="multiple"
           size="small"
           value={mappings[r.id]?.source_dim || undefined}
-          onChange={(v: string) => updateDim(r.id, 'source_dim', v || null)}
+          onChange={(v: string[]) => updateDim(r.id, 'source_dim', v.length ? v : null)}
           options={dimOptions('source')}
           allowClear
-          style={{ width: 140 }}
+          style={{ width: 190 }}
           placeholder="Select..."
         />
       ),
     },
     {
       title: 'Mech Dim',
-      width: 150,
+      width: 200,
       render: (_: unknown, r: Category) => (
         <Select
+          mode="multiple"
           size="small"
           value={mappings[r.id]?.mech_dim || undefined}
-          onChange={(v: string) => updateDim(r.id, 'mech_dim', v || null)}
+          onChange={(v: string[]) => updateDim(r.id, 'mech_dim', v.length ? v : null)}
           options={dimOptions('mech')}
           allowClear
-          style={{ width: 140 }}
+          style={{ width: 190 }}
           placeholder="Select..."
         />
       ),
     },
     {
       title: 'Target Dim',
-      width: 150,
+      width: 200,
       render: (_: unknown, r: Category) => (
         <Select
+          mode="multiple"
           size="small"
           value={mappings[r.id]?.target_dim || undefined}
-          onChange={(v: string) => updateDim(r.id, 'target_dim', v || null)}
+          onChange={(v: string[]) => updateDim(r.id, 'target_dim', v.length ? v : null)}
           options={dimOptions('target')}
           allowClear
-          style={{ width: 140 }}
+          style={{ width: 190 }}
           placeholder="Select..."
         />
       ),

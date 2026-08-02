@@ -35,8 +35,9 @@ async def export_csv():
     writer.writeheader()
     for r in rows:
         d = dict(r)
-        tags = d.get("vuln_tags", [])
-        d["vuln_tags"] = ",".join(tags) if tags else ""
+        for k in ("source_dim", "mech_dim", "target_dim", "vuln_tags"):
+            vals = d.get(k) or []
+            d[k] = ",".join(vals) if vals else ""
         writer.writerow(d)
 
     output.seek(0)

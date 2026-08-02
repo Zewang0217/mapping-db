@@ -51,10 +51,19 @@ async def update_mapping(category_id: int, body: MappingUpdate):
         if not row:
             raise HTTPException(404, "Mapping not found")
 
-        # Update category status to 'mapped' if all dims are filled
-        if all(row.get(d) is not None for d in ("source_dim", "mech_dim", "target_dim")):
+        # Update category status: 'mapped' when all dims filled, demote back if a dim is cleared
+        if all(
+            bool(row.get(d)) for d in ("source_dim", "mech_dim", "target_dim")
+        ):
             await conn.execute(
                 "UPDATE categories SET status='mapped', updated_at=NOW() WHERE id=$1",
+                category_id,
+            )
+        else:
+            # demote only if it was auto-mapped, never clobber needs_discussion
+            await conn.execute(
+                "UPDATE categories SET status='pending', updated_at=NOW() "
+                "WHERE id=$1 AND status='mapped'",
                 category_id,
             )
 

@@ -25,9 +25,9 @@ export interface Category {
 export interface Mapping {
   id: number;
   category_id: number;
-  source_dim?: string | null;
-  mech_dim?: string | null;
-  target_dim?: string | null;
+  source_dim?: string[] | null;
+  mech_dim?: string[] | null;
+  target_dim?: string[] | null;
   vuln_tags: string[];
   confidence?: string | null;
   evidence?: string | null;
@@ -90,9 +90,9 @@ export const api_getMapping = (cid: number): Promise<Mapping | null> =>
     .catch(() => null);
 
 export const api_updateMapping = (cid: number, d: {
-  source_dim?: string | null;
-  mech_dim?: string | null;
-  target_dim?: string | null;
+  source_dim?: string[] | null;
+  mech_dim?: string[] | null;
+  target_dim?: string[] | null;
   vuln_tags?: string[];
   confidence?: string | null;
   evidence?: string | null;

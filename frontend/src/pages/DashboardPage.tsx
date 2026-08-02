@@ -100,21 +100,29 @@ export default function DashboardPage() {
         );
 
         // Build Sankey: source_dim → mech_dim → target_dim
+        // Multi-valued dims expand to element-wise edges (each value is its own node)
         const transitionCounts = new Map<string, number>();
         const nodeSet = new Set<string>();
 
         for (const m of allMappings) {
-          if (m.source_dim && m.mech_dim) {
-            const key = `S→M:${m.source_dim}→${m.mech_dim}`;
-            transitionCounts.set(key, (transitionCounts.get(key) || 0) + 1);
-            nodeSet.add(m.source_dim);
-            nodeSet.add(m.mech_dim);
+          const sources = m.source_dim || [];
+          const mechs = m.mech_dim || [];
+          const targets = m.target_dim || [];
+          for (const s of sources) {
+            for (const me of mechs) {
+              const key = `S→M:${s}→${me}`;
+              transitionCounts.set(key, (transitionCounts.get(key) || 0) + 1);
+              nodeSet.add(s);
+              nodeSet.add(me);
+            }
           }
-          if (m.mech_dim && m.target_dim) {
-            const key = `M→T:${m.mech_dim}→${m.target_dim}`;
-            transitionCounts.set(key, (transitionCounts.get(key) || 0) + 1);
-            nodeSet.add(m.mech_dim);
-            nodeSet.add(m.target_dim);
+          for (const me of mechs) {
+            for (const t of targets) {
+              const key = `M→T:${me}→${t}`;
+              transitionCounts.set(key, (transitionCounts.get(key) || 0) + 1);
+              nodeSet.add(me);
+              nodeSet.add(t);
+            }
           }
         }
 

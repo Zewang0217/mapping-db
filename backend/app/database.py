@@ -47,9 +47,9 @@ async def init_db():
             CREATE TABLE IF NOT EXISTS mappings (
                 id SERIAL PRIMARY KEY,
                 category_id INT UNIQUE NOT NULL REFERENCES categories(id) ON DELETE CASCADE,
-                source_dim TEXT,
-                mech_dim TEXT,
-                target_dim TEXT,
+                source_dim TEXT[],
+                mech_dim TEXT[],
+                target_dim TEXT[],
                 vuln_tags TEXT[] DEFAULT '{}',
                 confidence TEXT CHECK (confidence IN ('high', 'medium', 'low')),
                 evidence TEXT,
@@ -73,4 +73,24 @@ async def init_db():
                 updated_at TIMESTAMPTZ DEFAULT NOW(),
                 UNIQUE(dimension, value_name)
             );
+        """)
+
+        # Migration: single-value TEXT dims -> TEXT[] (idempotent; no-op on fresh DBs)
+        await conn.execute("""
+            DO $$
+            BEGIN
+                IF EXISTS (
+                    SELECT 1 FROM information_schema.columns
+                    WHERE table_name = 'mappings' AND column_name = 'source_dim'
+                      AND data_type = 'text'
+                ) THEN
+                    ALTER TABLE mappings
+                        ALTER COLUMN source_dim TYPE TEXT[]
+                        USING CASE WHEN source_dim IS NULL THEN NULL ELSE ARRAY[source_dim] END,
+                        ALTER COLUMN mech_dim TYPE TEXT[]
+                        USING CASE WHEN mech_dim IS NULL THEN NULL ELSE ARRAY[mech_dim] END,
+                        ALTER COLUMN target_dim TYPE TEXT[]
+                        USING CASE WHEN target_dim IS NULL THEN NULL ELSE ARRAY[target_dim] END;
+                END IF;
+            END $$;
         """)

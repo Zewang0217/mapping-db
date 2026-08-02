@@ -58,9 +58,9 @@ class CategoryResponse(BaseModel):
 # ── Mapping ─────────────────────────────────────────────
 
 class MappingUpdate(BaseModel):
-    source_dim: str | None = None
-    mech_dim: str | None = None
-    target_dim: str | None = None
+    source_dim: list[str] | None = None
+    mech_dim: list[str] | None = None
+    target_dim: list[str] | None = None
     vuln_tags: list[str] | None = None
     confidence: str | None = None
     evidence: str | None = None
@@ -70,9 +70,9 @@ class MappingUpdate(BaseModel):
 class MappingResponse(BaseModel):
     id: int
     category_id: int
-    source_dim: str | None
-    mech_dim: str | None
-    target_dim: str | None
+    source_dim: list[str] | None
+    mech_dim: list[str] | None
+    target_dim: list[str] | None
     vuln_tags: list[str]
     confidence: str | None
     evidence: str | None
