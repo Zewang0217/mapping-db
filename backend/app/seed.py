@@ -10,21 +10,20 @@ DIMENSION_VALUES = [
     ("source", "运行时环境", "恶意来自 MCP server、其他 agent、系统进程"),
     ("source", "来源不明", "原始分类未陈述攻击从哪个渠道进入"),
 
-    # Mechanism (7 values)
-    ("mech", "指令操纵", "通过注入/覆盖/投毒改变模型执行意图"),
-    ("mech", "代码执行", "通过 exec/eval/subprocess/动态 import 运行任意代码"),
-    ("mech", "混淆隐藏", "通过 base64/注释/Unicode/字符串拼接隐藏恶意代码"),
-    ("mech", "依赖操纵", "利用依赖/包管理机制——依赖混淆、typosquatting、未锁定依赖、远程下载执行"),
-    ("mech", "权限滥用", "声明通配符权限、越权调用工具、绕过最小权限原则"),
-    ("mech", "状态污染", "memory poisoning、修改 system prompt、上下文状态篡改"),
+    # Mechanism (values used so far; 按需增长 — unencountered values are NOT pre-seeded)
+    ("mech", "指令操纵", "以自然语言/文本为载体，作用于模型的理解与决策层，使模型做出本不会做的选择或输出"),
+    ("mech", "混淆隐藏", "可叠加属性（不参与主值互斥判定）：通过隐藏/混淆规避检测"),
+    ("mech", "状态污染", "污染持久状态——记忆投毒、自修改、持久化后门、跨会话污染"),
     ("mech", "方式不明", "原始分类未陈述具体攻击手段"),
+    # 暂不预置（未遇到）：代码执行、依赖操纵、权限滥用 — 映射中遇到再讨论加回
 
-    # Target (6 values)
+    # Target (values used so far)
     ("target", "窃取信息", "违反机密性——读取/外传敏感数据、环境变量、系统提示"),
     ("target", "破坏系统", "违反完整性和可用性——加密勒索、删除数据、植入后门"),
     ("target", "持久控制", "违反控制性——写 cron、改配置、创建进程驻留"),
     ("target", "绕过防御", "反检测、反拒绝、混淆意图以逃避安全策略"),
     ("target", "资源滥用", "间接违反可用性——盗用计算资源、API quota 挖矿"),
+    ("target", "内容安全危害", "违反内容安全——模型输出可致物理伤害/违法/自残等有害内容，受害对象是工具用户（人）"),
     ("target", "目标不明", "原始分类未陈述攻击的最终后果"),
 
     # Vulnerability tags (8 values, 2026-08-02 literature-grounded revision)
