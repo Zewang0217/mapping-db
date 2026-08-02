@@ -115,11 +115,19 @@ export default function CategoriesPage() {
 
   const columns = [
     { title: 'ID', dataIndex: 'id', width: 60 },
-    { title: 'Category Name', dataIndex: 'original_name', ellipsis: true,
+    {
+      title: 'Category Name',
+      dataIndex: 'original_name',
+      width: 280,
       render: (name: string, r: Category) => (
-        <Input size="small" defaultValue={name} style={{ border: 'none', background: 'transparent' }}
-          onBlur={(e) => { if (e.target.value !== name) updateName(r.id, e.target.value); }}
-          onPressEnter={(e: any) => { (e.target as HTMLInputElement).blur(); }} />
+        <div>
+          <Input size="small" defaultValue={name} style={{ border: 'none', background: 'transparent' }}
+            onBlur={(e) => { if (e.target.value !== name) updateName(r.id, e.target.value); }}
+            onPressEnter={(e: any) => { (e.target as HTMLInputElement).blur(); }} />
+          {r.description ? (
+            <div style={{ fontSize: 12, color: '#888', marginTop: 2, lineHeight: 1.4 }}>{r.description}</div>
+          ) : null}
+        </div>
       ),
     },
     {
