@@ -10,7 +10,7 @@ router = APIRouter()
 
 FIELDNAMES = [
     "source_name", "source_type", "original_name", "description", "is_threat",
-    "source_dim", "mech_dim", "target_dim", "vuln_tags", "confidence",
+    "source_dim", "mech_dim", "target_dim", "vuln_tags", "carrier_tags", "confidence",
     "evidence", "notes",
 ]
 
@@ -23,7 +23,7 @@ async def export_csv():
             SELECT s.name AS source_name, s.source_type,
                    c.original_name, c.description, c.is_threat,
                    m.source_dim, m.mech_dim, m.target_dim,
-                   m.vuln_tags, m.confidence, m.evidence, m.notes
+                   m.vuln_tags, m.carrier_tags, m.confidence, m.evidence, m.notes
             FROM mappings m
             JOIN categories c ON c.id = m.category_id
             JOIN sources s ON s.id = c.source_id
@@ -35,7 +35,7 @@ async def export_csv():
     writer.writeheader()
     for r in rows:
         d = dict(r)
-        for k in ("source_dim", "mech_dim", "target_dim", "vuln_tags"):
+        for k in ("source_dim", "mech_dim", "target_dim", "vuln_tags", "carrier_tags"):
             vals = d.get(k) or []
             d[k] = ",".join(vals) if vals else ""
         writer.writerow(d)

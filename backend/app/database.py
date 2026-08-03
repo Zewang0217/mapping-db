@@ -51,6 +51,7 @@ async def init_db():
                 mech_dim TEXT[],
                 target_dim TEXT[],
                 vuln_tags TEXT[] DEFAULT '{}',
+                carrier_tags TEXT[] DEFAULT '{}',
                 confidence TEXT CHECK (confidence IN ('high', 'medium', 'low')),
                 evidence TEXT,
                 notes TEXT,
@@ -91,6 +92,19 @@ async def init_db():
                         USING CASE WHEN mech_dim IS NULL THEN NULL ELSE ARRAY[mech_dim] END,
                         ALTER COLUMN target_dim TYPE TEXT[]
                         USING CASE WHEN target_dim IS NULL THEN NULL ELSE ARRAY[target_dim] END;
+                END IF;
+            END $$;
+        """)
+
+        # Migration: add carrier_tags column (idempotent; no-op if already present)
+        await conn.execute("""
+            DO $$
+            BEGIN
+                IF NOT EXISTS (
+                    SELECT 1 FROM information_schema.columns
+                    WHERE table_name = 'mappings' AND column_name = 'carrier_tags'
+                ) THEN
+                    ALTER TABLE mappings ADD COLUMN carrier_tags TEXT[] DEFAULT '{}';
                 END IF;
             END $$;
         """)

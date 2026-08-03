@@ -62,6 +62,7 @@ class MappingUpdate(BaseModel):
     mech_dim: list[str] | None = None
     target_dim: list[str] | None = None
     vuln_tags: list[str] | None = None
+    carrier_tags: list[str] | None = None
     confidence: str | None = None
     evidence: str | None = None
     notes: str | None = None
@@ -74,6 +75,7 @@ class MappingResponse(BaseModel):
     mech_dim: list[str] | None
     target_dim: list[str] | None
     vuln_tags: list[str]
+    carrier_tags: list[str]
     confidence: str | None
     evidence: str | None
     notes: str | None

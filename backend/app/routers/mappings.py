@@ -31,6 +31,9 @@ async def update_mapping(category_id: int, body: MappingUpdate):
     if body.vuln_tags is not None:
         fields["vuln_tags"] = body.vuln_tags  # list → PostgreSQL TEXT[] auto-cast
 
+    if body.carrier_tags is not None:
+        fields["carrier_tags"] = body.carrier_tags
+
     if not fields:
         raise HTTPException(400, "No fields to update")
 

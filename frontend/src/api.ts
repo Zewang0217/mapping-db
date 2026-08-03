@@ -29,6 +29,7 @@ export interface Mapping {
   mech_dim?: string[] | null;
   target_dim?: string[] | null;
   vuln_tags: string[];
+  carrier_tags?: string[] | null;
   confidence?: string | null;
   evidence?: string | null;
   notes?: string | null;
@@ -94,6 +95,7 @@ export const api_updateMapping = (cid: number, d: {
   mech_dim?: string[] | null;
   target_dim?: string[] | null;
   vuln_tags?: string[];
+  carrier_tags?: string[] | null;
   confidence?: string | null;
   evidence?: string | null;
   notes?: string | null;

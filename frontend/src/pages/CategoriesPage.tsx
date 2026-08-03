@@ -61,6 +61,10 @@ export default function CategoriesPage() {
     .filter(d => d.dimension === 'vuln')
     .map(d => ({ value: d.value_name, label: d.value_name }));
 
+  const carrierOptions = dimVals
+    .filter(d => d.dimension === 'carrier')
+    .map(d => ({ value: d.value_name, label: d.value_name }));
+
   const confOptions = [
     { value: 'high', label: 'High' },
     { value: 'medium', label: 'Medium' },
@@ -182,6 +186,24 @@ export default function CategoriesPage() {
           allowClear
           style={{ width: 190 }}
           placeholder="Select..."
+        />
+      ),
+    },
+    {
+      title: 'Carrier Tags',
+      width: 200,
+      render: (_: unknown, r: Category) => (
+        <Select
+          mode="multiple"
+          size="small"
+          value={mappings[r.id]?.carrier_tags || []}
+          onChange={(v: string[]) =>
+            updateDim(r.id, 'carrier_tags', v.length ? v : null)
+          }
+          options={carrierOptions}
+          style={{ width: 190 }}
+          placeholder="Tags..."
+          allowClear
         />
       ),
     },
