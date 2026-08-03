@@ -63,7 +63,7 @@ async def init_db():
 
             CREATE TABLE IF NOT EXISTS dimension_values (
                 id SERIAL PRIMARY KEY,
-                dimension TEXT NOT NULL CHECK (dimension IN ('source', 'mech', 'target', 'vuln')),
+                dimension TEXT NOT NULL CHECK (dimension IN ('source', 'mech', 'target', 'vuln', 'carrier')),
                 value_name TEXT NOT NULL,
                 definition TEXT,
                 examples TEXT,
@@ -105,6 +105,23 @@ async def init_db():
                     WHERE table_name = 'mappings' AND column_name = 'carrier_tags'
                 ) THEN
                     ALTER TABLE mappings ADD COLUMN carrier_tags TEXT[] DEFAULT '{}';
+                END IF;
+            END $$;
+        """)
+
+        # Migration: widen dimension_values CHECK constraint to include 'carrier'
+        # (idempotent; only rebuilds when the old constraint lacks carrier)
+        await conn.execute("""
+            DO $$
+            BEGIN
+                IF EXISTS (
+                    SELECT 1 FROM pg_constraint
+                    WHERE conname = 'dimension_values_dimension_check'
+                      AND pg_get_constraintdef(oid) NOT LIKE '%carrier%'
+                ) THEN
+                    ALTER TABLE dimension_values DROP CONSTRAINT dimension_values_dimension_check;
+                    ALTER TABLE dimension_values ADD CONSTRAINT dimension_values_dimension_check
+                        CHECK (dimension IN ('source', 'mech', 'target', 'vuln', 'carrier'));
                 END IF;
             END $$;
         """)
